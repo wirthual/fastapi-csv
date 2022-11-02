@@ -96,6 +96,9 @@ class FastAPI_CSV(FastAPI):
                         where_clauses.append(f"instr({name[:-9]}, '{val}') > 0")
                     else:
                         if isinstance(val, str):
+                            val = val.replace(
+                                "\x00", ""
+                            )  # Fix for internal server error at: http://localhost:8080/Export_Tabelle?CAS_Nr=%00
                             val = f"'{val}'"
                         where_clauses.append(f"{name}={val}")
             if where_clauses:
